@@ -26,13 +26,22 @@ create table item(
     foreign key(hotel_id) references user(id) on delete cascade
 );
 
-create table ordered_items(
+insert into item (name,price,unit,hotel_id)values
+("chicken curry","150","30","plaza@123"),
+("Biriyani","120","130","plaza@123"),
+("Porotta","10","430","domi123"),
+("motta curry","30","130","domi123"),
+("Appam","5","730","domi123"),
+("chicken fry","150","30","ana123"),
+("beef","120","130","ana123"),
+("puttu","5","230","ana123");
+
+create table ordered_item(
 	name varchar(100) not null,
     total_price int not null,
     unit int not null,
     hotel_id varchar(100) not null,
     customer_id varchar(100) not null,
-    status enum("On the Way","Delivered"),
     foreign key(hotel_id) references user(id) on delete cascade,
     foreign key(customer_id) references user(id) on delete cascade
 );
