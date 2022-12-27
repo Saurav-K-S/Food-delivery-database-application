@@ -3,10 +3,34 @@ from functools import partial
 from tkinter import *
 
 
+def Alert(n):
+    if(n == 0):
+        def retrylogin():
+            loginError.destroy()
+            LoginPage()
+        loginError = Tk()
+        loginError.geometry('360x360')
+        loginError.title('LOGIN ERROR!!!')
+        Label(loginError, text='ERROR\nCan\'t log you in please try again').pack(side=CENTER)
+        Button(loginError, text='Retry Login', command=retrylogin).pack(side=CENTER)
+        loginError.mainloop()
+    elif(n == 1):
+        def retryregister():
+            registerError.destroy()
+            RegisterPage()
+        registerError = Tk()
+        registerError.geometry('360x360')
+        registerError.title('REGISTER ERROR!!!')
+        Label(registerError, text='ERROR\nCan\'t register please try again').pack(side=CENTER)
+        Button(registerError, text='Retry Register', command=retryregister).pack(side=CENTER)
+        registerError.mainloop()
+
 def LoginPage():
+
     def validateLogin(usrnm, pswd):
         print("USERNAME: ", usrnm.get())
         print("PASSWORD: ", pswd.get())
+    
     def Register():
         login.destroy()
         RegisterPage()
@@ -39,6 +63,9 @@ def LoginPage():
     login.mainloop()
 
 def RegisterPage():
+
+    def validateRegistration():
+        print()
 
     def Login():
         register.destroy()
@@ -87,7 +114,7 @@ def RegisterPage():
     pswdEntry = Entry(body, textvariable=confpsswd, show='$').pack()
 
     Label(body,text='\n').pack()
-    Button(body, text='Create Account').pack()
+    Button(body, text='Create Account', command=validateRegistration).pack()
     register.mainloop()
 
 LoginPage()
