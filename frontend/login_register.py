@@ -2,6 +2,20 @@ from fileinput import filename
 from functools import partial
 from tkinter import *
 
+exec(open('./backend/functions.py').read())
+#from functions import * 
+
+import mysql.connector
+
+
+dataBase = mysql.connector.connect(
+host ="localhost",
+user ="root",
+passwd ="I am lonely@1",
+database ="yummy"
+)
+
+db = dataBase.cursor()
 
 def Alert(n):
     if(n == 0):
@@ -28,8 +42,13 @@ def Alert(n):
 def LoginPage():
 
     def validateLogin(usrnm, pswd):
+        checkl = login(usrnm.get(), pswd.get())
         print("USERNAME: ", usrnm.get())
         print("PASSWORD: ", pswd.get())
+        if(checkl):
+            print("LOGINED SCREEN")
+        else:
+            Alert(0)
     
     def Register():
         login.destroy()
@@ -64,8 +83,12 @@ def LoginPage():
 
 def RegisterPage():
 
-    def validateRegistration():
-        print()
+    def validateRegistration(data):
+        checkr = register(data)
+        if(checkr):
+            LoginPage()
+        else:
+            Alert(1)
 
     def Login():
         register.destroy()
@@ -90,7 +113,7 @@ def RegisterPage():
     phno = StringVar()
     addr = StringVar()
     psswd = StringVar()
-    confpsswd = StringVar()
+    #confpsswd = StringVar()
 
     Label(body, text='\nUser Name:').pack()
     pswdEntry = Entry(body, textvariable=usrnm, show='$').pack()
@@ -110,8 +133,9 @@ def RegisterPage():
     Label(body, text='\nPassword:').pack()
     pswdEntry = Entry(body, textvariable=psswd, show='$').pack()
 
-    Label(body, text='\nConfirm Password:').pack()
-    pswdEntry = Entry(body, textvariable=confpsswd, show='$').pack()
+    data = (usrnm.get(), rlnm.get(), email.get(), phno.get(), addr.get(), psswd.get())
+    #Label(body, text='\nConfirm Password:').pack()
+    #pswdEntry = Entry(body, textvariable=confpsswd, show='$').pack()
 
     Label(body,text='\n').pack()
     Button(body, text='Create Account', command=validateRegistration).pack()
