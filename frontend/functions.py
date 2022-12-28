@@ -6,7 +6,7 @@ import mysql.connector
 dataBase = mysql.connector.connect(
 host ="localhost",
 user ="root",
-passwd ="fuckyou",
+passwd ="101101101101",
 database ="yummy"
 )
 
@@ -14,7 +14,7 @@ db = dataBase.cursor()
 
 
 
-def login(user,pwd):
+def loginFN(user,pwd):
 
     try:
 
@@ -32,7 +32,7 @@ def login(user,pwd):
         print(err)
         return "Unexpected Error Occurred"
 
-def register(data):
+def registerFN(data):
     try:
 
         add_user_query="insert into user values(%s,%s,%s,%s,%s,%s,%s)"

@@ -2,20 +2,22 @@ from fileinput import filename
 from functools import partial
 from tkinter import *
 
-exec(open('./backend/functions.py').read())
+from functions import loginFN, registerFN
+
+# exec(open('./backend/functions.py').read())
 #from functions import * 
 
-import mysql.connector
+# import mysql.connector
 
 
-dataBase = mysql.connector.connect(
-host ="localhost",
-user ="root",
-passwd ="I am lonely@1",
-database ="yummy"
-)
+# dataBase = mysql.connector.connect(
+# host ="localhost",
+# user ="root",
+# passwd ="I am lonely@1",
+# database ="yummy"
+# )
 
-db = dataBase.cursor()
+# db = dataBase.cursor()
 
 def Alert(n):
     if(n == 0):
@@ -25,8 +27,8 @@ def Alert(n):
         loginError = Tk()
         loginError.geometry('360x360')
         loginError.title('LOGIN ERROR!!!')
-        Label(loginError, text='ERROR\nCan\'t log you in please try again').pack(side=CENTER)
-        Button(loginError, text='Retry Login', command=retrylogin).pack(side=CENTER)
+        Label(loginError, text='ERROR\nCan\'t log you in please try again').pack()
+        Button(loginError, text='Retry Login', command=retrylogin).pack()
         loginError.mainloop()
     elif(n == 1):
         def retryregister():
@@ -35,20 +37,17 @@ def Alert(n):
         registerError = Tk()
         registerError.geometry('360x360')
         registerError.title('REGISTER ERROR!!!')
-        Label(registerError, text='ERROR\nCan\'t register please try again').pack(side=CENTER)
-        Button(registerError, text='Retry Register', command=retryregister).pack(side=CENTER)
+        Label(registerError, text='ERROR\nCan\'t register please try again').pack()
+        Button(registerError, text='Retry Register', command=retryregister).pack()
         registerError.mainloop()
 
 def LoginPage():
 
     def validateLogin(usrnm, pswd):
-        checkl = login(usrnm.get(), pswd.get())
-        print("USERNAME: ", usrnm.get())
-        print("PASSWORD: ", pswd.get())
-        if(checkl):
-            print("LOGINED SCREEN")
-        else:
-            Alert(0)
+        print(usrnm.get())
+        print(pswd.get())
+        checkl = loginFN(usrnm.get(), pswd.get())
+        print(checkl)
     
     def Register():
         login.destroy()
@@ -72,8 +71,8 @@ def LoginPage():
     usrnmEntry = Entry(body, textvariable=usrnm).pack()
     Label(body, text='\nPassword:').pack()
     pswdEntry = Entry(body, textvariable=pswd, show='$').pack()
-
-    validateLogin = partial(validateLogin, usrnmEntry, pswdEntry)
+    
+    validateLogin = partial(validateLogin, usrnm, pswd)
 
     Label(body,text='\n').pack()
     Button(body, text = 'Login', command=validateLogin).pack()
@@ -84,11 +83,10 @@ def LoginPage():
 def RegisterPage():
 
     def validateRegistration(data):
-        checkr = register(data)
-        if(checkr):
-            LoginPage()
-        else:
-            Alert(1)
+        datanew = [data[0].get(),data[1].get(),data[2].get(),data[3].get(),data[4].get(),data[5].get(),data[6]]
+        print(datanew)
+        checkr = registerFN(datanew)
+        print(checkr)
 
     def Login():
         register.destroy()
@@ -116,26 +114,30 @@ def RegisterPage():
     #confpsswd = StringVar()
 
     Label(body, text='\nUser Name:').pack()
-    pswdEntry = Entry(body, textvariable=usrnm, show='$').pack()
+    usrnmEntry = Entry(body, textvariable=usrnm).pack()
 
     Label(body, text='\nReal Name:').pack()
-    pswdEntry = Entry(body, textvariable=rlnm, show='$').pack()
+    rlnmEntry = Entry(body, textvariable=rlnm).pack()
 
     Label(body, text='\nEmail Address:').pack()
-    pswdEntry = Entry(body, textvariable=email, show='$').pack()
+    emailEntry = Entry(body, textvariable=email).pack()
 
     Label(body, text='\nPhone Number:').pack()
-    pswdEntry = Entry(body, textvariable=phno, show='$').pack()
+    phnoEntry = Entry(body, textvariable=phno).pack()
 
     Label(body, text='\nAddress:').pack()
-    pswdEntry = Entry(body, textvariable=addr, show='$').pack()
+    addrEntry = Entry(body, textvariable=addr).pack()
 
     Label(body, text='\nPassword:').pack()
-    pswdEntry = Entry(body, textvariable=psswd, show='$').pack()
+    psswdEntry = Entry(body, textvariable=psswd).pack()
 
-    data = (usrnm.get(), rlnm.get(), email.get(), phno.get(), addr.get(), psswd.get())
+    data = [usrnm, rlnm, email, phno, addr, psswd, "customer"]
+
+
+    validateRegistration = partial(validateRegistration,data)
     #Label(body, text='\nConfirm Password:').pack()
-    #pswdEntry = Entry(body, textvariable=confpsswd, show='$').pack()
+    #pswdEntry = Entry(body, textvariable=confpsswd).pack()
+
 
     Label(body,text='\n').pack()
     Button(body, text='Create Account', command=validateRegistration).pack()
