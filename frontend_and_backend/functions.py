@@ -111,6 +111,8 @@ def history(user_id):
     
 
 
+
+
 # register(("cj@123","Vyshnav C J","cj@gmail.com","9846050605","8 mile, pampady P O, Pin-code 682301","123456","customer"))
 
 
