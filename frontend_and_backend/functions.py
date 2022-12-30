@@ -112,8 +112,8 @@ def history(user_id):
         return False
     
 
-a=history("cj@1234")
-print(a)
+# a=history("cj@1234")
+# print(a)
 
 
 #registerFN(("cj@1234","Vyshnav C J","cj2@gmail.com","9846054605","8 mile, pampady P O, Pin-code 682301","123456","customer"))
