@@ -6,7 +6,7 @@ import mysql.connector
 dataBase = mysql.connector.connect(
 host ="localhost",
 user ="root",
-passwd ="101101101101",
+passwd ="I am lonely@1",
 database ="yummy"
 )
 
@@ -99,21 +99,24 @@ def fetch_items():
 def history(user_id):
     try:
 
-        ordered_items_query="select ordered_item.*,hotel.name from ordered_item,user as hotel where ordered_item.hotel_id = hotel.id and ordered_item.customer_id=%s"
+        ordered_items_query="select S.name, S.total_price,S.unit ,hotel.name from ordered_item as S,user as hotel where S.hotel_id = hotel.id and S.customer_id=%s"
         adr=(user_id,)
         db.execute(ordered_items_query,adr)
         items = db.fetchall()
-        return items
-
+        if items!=None:
+            return items
+        else:
+            return None
     except mysql.connector.Error as err:
         print(err)
         return False
     
 
+a=history("cj@1234")
+print(a)
 
 
-
-# register(("cj@123","Vyshnav C J","cj@gmail.com","9846050605","8 mile, pampady P O, Pin-code 682301","123456","customer"))
+#registerFN(("cj@1234","Vyshnav C J","cj2@gmail.com","9846054605","8 mile, pampady P O, Pin-code 682301","123456","customer"))
 
 
 # add_item(("chicken curry","150","2"),"plaza@123","cj@123","1")
