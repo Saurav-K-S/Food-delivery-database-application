@@ -6,7 +6,7 @@ import mysql.connector
 dataBase = mysql.connector.connect(
 host ="localhost",
 user ="root",
-passwd ="101010101010",
+passwd ="I am lonely@1",
 database ="yummy"
 )
 
@@ -24,7 +24,7 @@ def loginFN(user,pwd):
         user  = db.fetchone()
 
         if user==None:
-            return "Invalid Credentials"
+            return False
         else:
             return {"id":user[0],"name":user[1],"email":user[2],"Phone":user[3],"Address":user[4],"role":user[5]}
         
@@ -46,35 +46,40 @@ def registerFN(data):
         return False
 
 
-def add_item(data,hotel_id,customer_id,item_id):
+def add_itemFN(purchased_units,customer_id,item_id):
     try:
 
-        price = int(data[1])
-        purchased_unit = int(data[2])
+        find_hotel_id_query="select * from item where id=%s"
+        adr=(int(item_id),)
+        db.execute(find_hotel_id_query,adr)
+        data=db.fetchone()
 
-        total_price = price*purchased_unit
-        
-        add_item_query="insert into ordered_item (name,total_price,unit,hotel_id,customer_id)values(%s,%s,%s,%s,%s)"
-        adr = (data[0],total_price,data[2],hotel_id,customer_id)
-        db.execute(add_item_query,adr)
-        dataBase.commit()
+        if data!=None:
+            item_id = data[0]
+            name = data[1]
+            price = int(data[2])
+            units = int(data[3])
+            hotel_id = data[4]
 
-        get_item_query="select unit from item where id=%s and hotel_id=%s"
-        adr = (item_id,hotel_id)
-        db.execute(get_item_query,adr)
-        units = db.fetchone()
+            if units<purchased_units:
+                return False
 
-        if units!=None:
-            remaining_unit = int(units[0])-purchased_unit
-            update_item_query="update item set unit=%s  where id =%s and hotel_id=%s"
-            adr = (remaining_unit,item_id,hotel_id)
+            total_price = price*int(purchased_units)
+
+            add_item_query="insert into ordered_item (name,total_price,unit,hotel_id,customer_id)values(%s,%s,%s,%s,%s)"
+            adr = (name,total_price,purchased_units,hotel_id,customer_id)
+            db.execute(add_item_query,adr)
+            dataBase.commit()
+
+            remaining_unit = units-purchased_units
+            update_item_query="update item set unit=%s  where id =%s"
+            adr = (remaining_unit,item_id)
             db.execute(update_item_query,adr)
             dataBase.commit()
             return True
-        else:
-            return False
-
         
+        elif data==None:
+            return False
 
     except mysql.connector.Error as err:
         print(err)
@@ -82,10 +87,10 @@ def add_item(data,hotel_id,customer_id,item_id):
     
 
 
-def fetch_items():
+def fetch_itemsFN():
     try:
 
-        all_items_query="select item.*,user.name from item , user where item.hotel_id=user.id"
+        all_items_query="select item.*,user.name from item , user where item.hotel_id=user.id and unit!=0"
         db.execute(all_items_query)
         items = db.fetchall()
         return items
@@ -96,7 +101,7 @@ def fetch_items():
     
 
 
-def history(user_id):
+def historyFN(user_id):
     try:
 
         ordered_items_query="select S.name, S.total_price,S.unit ,hotel.name from ordered_item as S,user as hotel where S.hotel_id = hotel.id and S.customer_id=%s"
