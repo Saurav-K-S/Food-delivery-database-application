@@ -163,6 +163,10 @@ def HistoryPage(data):
     def Home():
         history.destroy()
         HomePage(data)
+    
+    def GoBack():
+        history.destroy()
+        LoginPage()
 
     history = Tk()
     history.title("History")
@@ -174,6 +178,7 @@ def HistoryPage(data):
     topbar.pack(side = 'top')
     Label(topbar, text='Yummy |').pack(side='left')
     Button(topbar, text='Home', command= Home).pack(side='right')
+    Button(topbar, text='Login', command= GoBack).pack(side='right')
 
     table_frame = Frame(history)
     table_frame.pack(fill="both", expand=True)
@@ -222,6 +227,10 @@ def HomePage(data):
     def History():
         home.destroy()
         HistoryPage(data)
+
+    def GoBack():
+        home.destroy()
+        LoginPage()
     
 
     def button_click(text1, text2):
@@ -247,12 +256,13 @@ def HomePage(data):
     topbar.pack(side = 'top')
     Label(topbar, text='Yummy |').pack(side='left')
     Button(topbar, text='History', command= History).pack(side='right')
+    Button(topbar, text='Login', command= GoBack).pack(side='right')
     
 
     # Create a frame to hold the text boxes and button
     frame = Frame(home,width=960,height=400)
     frame.pack()
-    header = Label(frame, text="History", font=("Arial", 16))
+    header = Label(frame, text="Home", font=("Arial", 16))
     header.pack()
 
     # Create a scrollbar and add it to the table frame

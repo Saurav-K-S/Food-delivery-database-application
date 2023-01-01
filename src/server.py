@@ -6,7 +6,7 @@ import mysql.connector
 dataBase = mysql.connector.connect(
 host ="localhost",
 user ="root",
-passwd ="I am lonely@1",
+passwd ="101101101101",
 database ="yummy"
 )
 
